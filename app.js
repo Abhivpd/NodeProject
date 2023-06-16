@@ -3,13 +3,16 @@ import { adminRouter } from './routes/admin.js';
 import { shopRouter } from './routes/shop.js';
 import bodyParser from 'body-parser';
 import { get404 } from './controllers/error.js';
+import { pool as db} from './util/database.js';
 
 const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-
+db.execute('SELECT * FROM products')
+    .then(result => console.log(result))
+    .catch(error => console.log(error))
 
 // app.use(urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));

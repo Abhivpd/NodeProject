@@ -1,3 +1,4 @@
+import { Cart } from "../models/cart.js";
 import { Product } from "../models/product.js";
 
 export const getProducts = (req, res, next) => {
@@ -13,9 +14,12 @@ export const getProducts = (req, res, next) => {
 export const getProduct = (req, res, next) => {
     const productId = req.params.productId;
     Product.fetchProductById(productId, product => {
-        console.log(product);
+        res.render('shop/product-details', {
+            product: product,
+            pageTitle: product.title,
+            path: '/products'
+        })
     })
-    res.redirect('/');
 }
 
 export const getIndex = (req, res, next) => {
@@ -29,10 +33,29 @@ export const getIndex = (req, res, next) => {
 }
 
 export const getCart = (req, res, next) => {
-    res.render('shop/cart', {
-        path: '/cart',
-        pageTitle: 'Your Cart'
+    Cart.getCart(cart => {
+        const cartProducts = []
+        Product.fetchAll(products => {
+            for (let product of products) {
+                const cartProductData = cart.products.find(prod => prod.id === product.id);
+                if(cartProductData) {
+                    cartProducts.push({productData: product});
+                    res.render('shop/cart', {
+                        path: '/cart',
+                        pageTitle: 'Your Cart'
+                    })
+                }
+            }
+        })
     })
+}
+
+export const postCart = (req, res, next) => {
+    const productId = req.body.productId;
+    Product.fetchProductById(productId, product => {
+        Cart.addProduct(productId, product.price)
+    })
+    res.redirect('/cart')
 }
 
 export const getOrders = (req, res, next) => {
