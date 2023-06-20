@@ -1,35 +1,41 @@
+import { response } from "express";
 import { Cart } from "../models/cart.js";
 import { Product } from "../models/product.js";
 
 export const getProducts = (req, res, next) => {
-    Product.fetchAll(products => {
-        res.render('shop/product-list', {
-            prods: products,
-            pageTitle: 'All Products',
-            path: '/products'
-        });
-    });
+    Product.fetchAll()
+        .then(([row, fieldData]) => {
+            res.render('shop/product-list', {
+                prods: row,
+                pageTitle: 'All Products',
+                path: '/products'
+            });
+        })
+        .catch(error => console.log(error));
 }
 
 export const getProduct = (req, res, next) => {
     const productId = req.params.productId;
-    Product.fetchProductById(productId, product => {
-        res.render('shop/product-details', {
-            product: product,
-            pageTitle: product.title,
-            path: '/products'
+    Product.fetchProductById(productId)
+        .then(([product]) => {
+            res.render('shop/product-details', {
+                product: product[0],
+                pageTitle: product[0].title,
+                path: '/products'
+            })
         })
-    })
 }
 
 export const getIndex = (req, res, next) => {
-    Product.fetchAll(products => {
-        res.render('shop/index', {
-            prods: products,
-            pageTitle: 'Shop',
-            path: '/'
-        });
-    });
+    Product.fetchAll()
+        .then(([row, fieldData]) => {
+            res.render('shop/index', {
+                prods: row,
+                pageTitle: 'Shop',
+                path: '/'
+            });
+        })
+        .catch(error => console.log(error))
 }
 
 export const getCart = (req, res, next) => {
@@ -38,8 +44,8 @@ export const getCart = (req, res, next) => {
         Product.fetchAll(products => {
             for (let product of products) {
                 const cartProductData = cart.products.find(prod => prod.id === product.id);
-                if(cartProductData) {
-                    cartProducts.push({productData: product});
+                if (cartProductData) {
+                    cartProducts.push({ productData: product });
                     res.render('shop/cart', {
                         path: '/cart',
                         pageTitle: 'Your Cart'

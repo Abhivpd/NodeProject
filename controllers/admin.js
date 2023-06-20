@@ -1,3 +1,4 @@
+import { response } from "express";
 import { Product } from "../models/product.js";
 
 export const getAddProducts = (req, res, next) => {
@@ -14,8 +15,9 @@ export const postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     const product = new Product(null, title, imageUrl, price, description);
-    product.save();
-    res.redirect('/');
+    product.save()
+        .then(() => res.redirect('/'))
+        .catch(error => console.log(error));
 }
 
 export const getEditProducts = (req, res, next) => {
@@ -57,7 +59,7 @@ export const getAdminProducts = (req, res, next) => {
 export const deleteAdminProducts = (req, res, next) => {
     const productId = req.params.productId
     Product.deleteProduct(productId, products => {
-        if(products) res.redirect('/admin/products');
+        if (products) res.redirect('/admin/products');
     });
 }
 
