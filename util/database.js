@@ -1,12 +1,7 @@
-import mysql from 'mysql2';
+import { Sequelize } from "sequelize";
 
-// 2 ways of connecting to database, 
-// => by creating a connection on any query, once query is done we should close the connection, this is inefficient as on every query we should be adding a connection
-// => by cerating a pool
-
-export const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    database: 'node_project',
-    password: '1234ABCD'
-}).promise();
+export const sequelize = new Sequelize('node-course', 'root', '1234ABCD', {
+    dialect: 'mysql',
+    host: 'localhost'
+})
+ 

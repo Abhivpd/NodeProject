@@ -1,5 +1,5 @@
 import Express from 'express';
-import { deleteAdminProducts, getAddProducts, getAdminProducts, getEditProducts, postAddProduct, postDeleteProduct, postEditProducts } from '../controllers/admin.js';
+import { getAddProducts, getAdminProducts, getEditProducts, postAddProduct, postDeleteProduct, postEditProducts } from '../controllers/admin.js';
 
 
 export const adminRouter = Express.Router();
