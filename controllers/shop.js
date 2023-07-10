@@ -1,5 +1,5 @@
-import { Cart } from "../models/cart.js";
-import { Product } from "../models/product.js";
+// import { Cart } from "../models/cart.js";
+// import { Product } from "../models/product.js";
 
 export const getProducts = (req, res, next) => {
     Product.findAll()
