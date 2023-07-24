@@ -3,8 +3,8 @@ import { adminRouter } from './routes/admin.js';
 import { shopRouter } from './routes/shop.js';
 import bodyParser from 'body-parser';
 import { get404 } from './controllers/error.js';
-import { mongoConnect } from './util/database.js';
 import User from './models/user.js';
+import mongoose from 'mongoose';
 
 const app = express.default();
 
@@ -27,8 +27,9 @@ app.use(shopRouter);
 
 app.use(get404);
 
-mongoConnect(() => {
-    app.listen(3000, () => {
-        console.log('Server is running on port 3000');
+mongoose.connect('mongodb+srv://Abhivpd:Abhi1234$@cluster0.rsxkjij.mongodb.net/?retryWrites=true&w=majority')
+    .then(response => {
+        console.log(response);
+        app.listen(3000, () => console.log('server is running'))
     })
-})
+    .catch(error => console.log(error))
