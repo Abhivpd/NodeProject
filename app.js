@@ -15,9 +15,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static('public'));
 
 app.use((req, res, next) => {
-    User.findUserById('64afbd09cecae76c4e83a93f')
+    User.findById('64c0000985ed3d44dce21502')
         .then(user => {
-            req.user = new User(user.username, user.email, user.cart, user._id);
+            req.user = user;
             next();
         });
 })
@@ -27,9 +27,21 @@ app.use(shopRouter);
 
 app.use(get404);
 
-mongoose.connect('mongodb+srv://Abhivpd:Abhi1234$@cluster0.rsxkjij.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://Abhivpd:Abhi1234$@cluster0.rsxkjij.mongodb.net/shop?retryWrites=true&w=majority')
     .then(response => {
-        console.log(response);
+        User.findOne()
+            .then(user => {
+                if (!user) {
+                    const user = new User({
+                        name: 'Abhishek',
+                        email: 'abhishekvpd"gmail.com',
+                        cart: {
+                            item: []
+                        }
+                    })
+                    user.save();
+                }
+            })
         app.listen(3000, () => console.log('server is running'))
     })
     .catch(error => console.log(error))
