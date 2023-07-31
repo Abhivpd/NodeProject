@@ -27,10 +27,8 @@
                                     </p>
                                 </div>
                                 <div class="card__actions">
-                                    <a href="/products/<%= product.id %>" class="btn">Details</a>
-                                    <form action="/add-to-cart" method="POST">
-                                        <button class="btn">Add to Cart</button>
-                                    </form>
+                                    <a href="/products/<%= product._id %>" class="btn">Details</a>
+                                    <%- include('../includes/add-to-cart.ejs', {product: product}) %>
                                 </div>
                             </article>
                             <% } %>
@@ -40,3 +38,10 @@
                         <% } %>
             </main>
             <%- include('../includes/end.ejs') %>
+
+
+<!-- PTR -->
+<!-- ===>
+we have included the add-to-cart include inside the for loop (general for all the loops), the product is the local variabel available in that loop only
+so  <%# include('../includes/add-to-cart.ejs) %> will not get that variable by default so we need to pass the data like this
+ include('../includes/add-to-cart.ejs', {product: product}) %> -->

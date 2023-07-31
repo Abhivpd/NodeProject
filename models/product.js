@@ -1,52 +1,29 @@
-import * as fs from 'fs';
-import { join } from 'path';
+import mongoose from "mongoose";
 
-const getProductsFromFile = callback => {
-    const path = join(
-        'data',
-        'products.json'
-    );
-    fs.readFile(path, (error, fileContent) => {
-        if (error) {
-            return callback([]);
-        }
-        callback(JSON.parse(fileContent))
-    })
-}
+const Schema = mongoose.Schema;
 
-const path = join(
-    'data',
-    'products.json'
-);
-
-export class Product {
-
-    constructor(title, imageUrl, price, description) {
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.price = price;
+const productSchema = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    imageUrl: {
+        type: String,
+        required: true
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
+})
 
-    save() {
-        this.id = Math.random().toString();
-        getProductsFromFile(products => {
-            products.push(this);
-            fs.writeFile(path, JSON.stringify(products), (err) => {
-                console.log(err);
-            })
-        });
-    }
-
-    static fetchAll(callback) {
-        getProductsFromFile(callback);
-    }
-
-    static fetchProductById(id, callback) {
-        getProductsFromFile(products => {
-            const product = products.find(p => p.id === id);
-            callback(product);
-        })
-    }
-}
-
+export default mongoose.model('Product', productSchema)

@@ -1,5 +1,5 @@
 import Express from 'express';
-import { getCart, getCheckout, getIndex, getOrders, getProduct, getProducts } from '../controllers/shop.js';
+import { cartDeleteProduct, getCart, getIndex, getOrders, getProduct, getProducts, postCart, postOrder } from '../controllers/shop.js';
 
 export const shopRouter = Express.Router();
 
@@ -11,9 +11,13 @@ shopRouter.get('/products/:productId', getProduct);
 
 shopRouter.get('/cart', getCart);
 
-shopRouter.get('/orders', getOrders);
+shopRouter.post('/cart', postCart);
 
-shopRouter.get('/checkout', getCheckout);
+shopRouter.post('/cart-delete-item', cartDeleteProduct);
+
+shopRouter.post('/create-order', postOrder);
+
+shopRouter.get('/orders', getOrders);
 
 
 
